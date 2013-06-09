@@ -20,6 +20,11 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 
 	@Override
 	public void atualizar(Usuario usuario) {
+		if (usuario.getPermissao() == null || usuario.getPermissao().size() == 0) {
+			Usuario usuarioPermissao = carregar(usuario.getCodigo());
+			usuario.setPermissao(usuario.getPermissao());
+			session.evict(usuarioPermissao);
+		}
 		session.update(usuario);		
 	}
 
@@ -38,8 +43,7 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 		String hql = "select u from Usuario u where u.login = :login";
 		Query consulta = session.createQuery(hql);
 		consulta.setString("login", login);
-		return (Usuario) consulta.uniqueResult()
-				;
+		return (Usuario) consulta.uniqueResult();
 	}
 
 	@Override
