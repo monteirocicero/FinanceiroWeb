@@ -28,6 +28,7 @@
 		<property name="use_sql_comments">true</property>
 				
 		<!-- Mapeando classes -->
-		<mapping class="financeiro.usuario.Usuario"/>	
+		<mapping class="financeiro.usuario.Usuario"/>
+		<mapping class="financeiro.conta.Conta"/>	
 	</session-factory>
 </hibernate-configuration>
