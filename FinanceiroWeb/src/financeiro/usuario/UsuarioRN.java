@@ -20,6 +20,10 @@ public class UsuarioRN {
 		return usuarioDAO.buscarPorLogin(login);
 	}
 	
+	public Usuario buscarPorEmail(String email) {
+		return usuarioDAO.buscarPorEmail(email);
+	}
+	
 	public void salvar(Usuario usuario) {
 		Integer codigo = usuario.getCodigo();
 		if (codigo == null || codigo == 0) {

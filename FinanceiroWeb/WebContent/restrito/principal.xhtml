@@ -13,8 +13,16 @@
 	
 	Usuário logado #{request.remoteUser}
 	<br />
+	Nome do Usuário Logado #{contextoBean.usuarioLogado.nome}
 	<h:form>
-		<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
+		<h:commandButton action="conta" value="Conta" />
+		
+		<h:selectOneMenu value="#{contextoBean.contaAtiva.conta}" valueChangeListener="#{contextoBean.contaAtiva}"
+			rendered="#{!empty contextoBean}" onchange="submit()">
+			<f:selectItems value="#{contaBean.lista}" var="conta" itemValue="#{conta.conta}" itemLabel="#{conta.descricao}"/>
+		</h:selectOneMenu>
+		
+		<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">u
 			<h:commandLink action="/admin/principal" title="Administrativo">
 				<h:graphicImage library="imagens" name="administrativo16.png"/>
 			</h:commandLink>

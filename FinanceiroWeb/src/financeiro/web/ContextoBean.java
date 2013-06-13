@@ -3,6 +3,7 @@ package financeiro.web;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -13,6 +14,7 @@ import financeiro.usuario.Usuario;
 import financeiro.usuario.UsuarioRN;
 
 @ManagedBean
+@SessionScoped
 public class ContextoBean {
 	
 	private Usuario usuarioLogado = null;
@@ -21,11 +23,11 @@ public class ContextoBean {
 	public Usuario getUsuarioLogado() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		ExternalContext external = context.getExternalContext();
-		String login = external.getRemoteUser();
+		String login = external.getRemoteUser(); // login utilizado eh o email
 		if (usuarioLogado == null || !login.equals(usuarioLogado.getLogin())) {
 			if (login != null) {
 				UsuarioRN usuarioRN = new UsuarioRN();
-				usuarioLogado = usuarioRN.buscarPorLogin(login);
+				usuarioLogado = usuarioRN.buscarPorEmail(login);
 				contaAtiva = null;
 			}
 		}

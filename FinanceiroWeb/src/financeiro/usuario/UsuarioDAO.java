@@ -8,5 +8,6 @@ public interface UsuarioDAO {
 	void excluir(Usuario usuario);
 	Usuario carregar(Integer codigo);
 	Usuario buscarPorLogin(String login);
+	Usuario buscarPorEmail(String email);
 	List<Usuario> listar();
 }

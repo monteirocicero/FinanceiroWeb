@@ -22,6 +22,10 @@ public class ContaRN {
 		return contaDAO.carregar(conta);
 	}
 	
+	public void excluir(Conta conta) {
+		contaDAO.excluir(conta);
+	}
+	
 	public void salvar(Conta conta) {
 		conta.setDataCadastro(new Date());
 		contaDAO.salvar(conta);

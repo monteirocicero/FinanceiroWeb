@@ -60,8 +60,22 @@
 				size="10" maxlength="10" redisplay="true"/>
 			
 			<h:outputText />
-			<h:commandButton action="#{usuarioBean.salvar}" value="Salvar" />
+			
 		</h:panelGrid>
+		<h:panelGroup rendered="#{empty contextoBean.usuarioLogado}">
+			<fieldset><legend>Conta Inicial</legend>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Descrição:" for="descricao"/>
+				<h:inputText id="descricao" value="#{usuarioBean.conta.descricao}" />
+				
+				<h:outputLabel value="Saldo Inicial:" for="saldoInicial"/>
+				<h:inputText id="saldoInicial" value="#{usuarioBean.conta.saldoInicial}" size="10">
+					<f:convertNumber minFractionDigits="2"/>
+				</h:inputText>
+			</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>
+		<h:commandButton action="#{usuarioBean.salvar}" value="Salvar" />
 	</h:form>
 </h:body>
 </html>
