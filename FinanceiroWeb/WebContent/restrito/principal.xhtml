@@ -3,14 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
-	  xmlns:sec="http://www.springframework.org/security/facelets/tags">
-<h:head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Principal</title>
-</h:head>
-<h:body>
-	<h1>Gerenciador Financeiro Pessoal</h1>
+	  xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="titulo">
+		Gerenciador Financeiro Pessoal
+	</ui:define>	  
 	
+	<ui:define name="corpo">
 	Usuário logado #{request.remoteUser}
 	<br />
 	Nome do Usuário Logado #{contextoBean.usuarioLogado.nome}
@@ -32,5 +33,6 @@
 			<h:graphicImage library="imagens" name="logout16.png"/>
 		</a>	
 	</h:form>
-</h:body>
+	</ui:define>
+</ui:composition>
 </html>
