@@ -1,5 +1,7 @@
 package financeiro.util;
 
+import financeiro.categoria.CategoriaDAO;
+import financeiro.categoria.CategoriaDAOHibernate;
 import financeiro.conta.ContaDAO;
 import financeiro.conta.ContaDAOHibernate;
 import financeiro.usuario.UsuarioDAO;
@@ -17,6 +19,12 @@ public class DAOFactory {
 		ContaDAOHibernate contaDAO = new ContaDAOHibernate();
 		contaDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return contaDAO;
+	}
+	
+	public static CategoriaDAO criarCategoriaDAO() {
+		CategoriaDAOHibernate categoriaDAO = new CategoriaDAOHibernate();
+		categoriaDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return categoriaDAO;
 	}
 
 }
