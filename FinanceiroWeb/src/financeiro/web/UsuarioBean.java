@@ -1,5 +1,7 @@
 package financeiro.web;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
@@ -7,6 +9,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
+import com.sun.xml.internal.ws.util.UtilException;
 
 import financeiro.conta.Conta;
 import financeiro.conta.ContaRN;
@@ -22,6 +26,7 @@ public class UsuarioBean {
 	private List<Usuario> lista;
 	private String destinoSalvar;
 	private Conta conta = new Conta();
+	private String senhaCriptografada;
 			
 	public String novo() {
 		destinoSalvar = "usuarioSucesso";
@@ -31,6 +36,7 @@ public class UsuarioBean {
 	
 	public String editar() {
 		confirmarSenha = usuario.getSenha();
+		senhaCriptografada = usuario.getSenha();
 		return "/publico/usuario";
 	}
 	
@@ -38,10 +44,23 @@ public class UsuarioBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 		String senha = usuario.getSenha();
 		
-		if (!senha.equals(confirmarSenha)) {
+		if (senha != null && senha.trim().length() > 0 && !senha.equals(confirmarSenha)) {
 			FacesMessage facesMessage = new FacesMessage("A senha não foi confirmada corretamente");
 			context.addMessage(null, facesMessage);
 			return null;
+		}
+		
+		if (senha != null && senha.trim().length() == 0) {
+			usuario.setSenha(senhaCriptografada);
+		} else {
+			try {
+				MessageDigest md = MessageDigest.getInstance("SHA-256");
+				md.update(senha.getBytes());
+				String senhaCripto = new sun.misc.BASE64Encoder().encode(md.digest());
+				usuario.setSenha(senhaCripto);
+			} catch (NoSuchAlgorithmException e) {
+				throw new UtilException("Erro ao criptografar a senha do usuário.", e);
+			}
 		}
 		
 		UsuarioRN usuarioRN = new UsuarioRN();
@@ -124,6 +143,14 @@ public class UsuarioBean {
 	
 	public Conta getConta() {
 		return conta;
+	}
+	
+	public void setSenhaCriptografada(String senhaCriptografada) {
+		this.senhaCriptografada = senhaCriptografada;
+	}
+	
+	public String getSenhaCriptografada() {
+		return senhaCriptografada;
 	}
 			
 }
