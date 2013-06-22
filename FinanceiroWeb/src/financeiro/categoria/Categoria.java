@@ -49,13 +49,15 @@ public class Categoria implements Serializable {
 	@OrderBy(clause="descricao asc")
 	private List<Categoria> filhos;
 	
-	private void Catetoria() {}
-
 	public Categoria(Categoria pai, Usuario usuario, String descricao, int fator) {
 		this.pai = pai;
 		this.usuario = usuario;
 		this.descricao = descricao;
 		this.fator = fator;
+	}
+
+	public Categoria() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

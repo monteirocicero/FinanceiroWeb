@@ -78,7 +78,6 @@ public class CategoriaRN {
 		Categoria receitas = new Categoria(null, usuario, "RECEITAS", 1);
 		receitas = categoriaDAO.salvar(receitas);
 		this.categoriaDAO.salvar(new Categoria(receitas, usuario, "Salário", 1));
-		this.categoriaDAO.salvar(new Categoria(receitas, usuario, "Salário", 1));
 		this.categoriaDAO.salvar(new Categoria(receitas, usuario, "Restituições", 1));
 		this.categoriaDAO.salvar(new Categoria(receitas, usuario, "Rendimento", 1));
 	}
