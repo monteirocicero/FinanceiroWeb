@@ -21,6 +21,7 @@
 							<f:selectItems value="#{contaBean.lista}" var="conta"
 								itemValue="#{conta.conta}" itemLabel="#{conta.descricao}"/>
 						</h:selectOneMenu>
+						<h:commandButton value="Lançamentos" action="/restrito/lancamento" />
 					</td>
 					<td align="left">
 						<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">

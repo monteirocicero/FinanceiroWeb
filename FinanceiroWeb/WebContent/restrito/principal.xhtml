@@ -4,7 +4,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
 	  xmlns:sec="http://www.springframework.org/security/facelets/tags"
-	  xmlns:ui="http://java.sun.com/jsf/facelets">
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:util="http://java.sun.com/jsf/composite/components/util"
+	  xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/templates/principal.xhtml">
 	<ui:define name="titulo">
@@ -12,27 +14,31 @@
 	</ui:define>	  
 	
 	<ui:define name="corpo">
-	Usuário logado #{request.remoteUser}
-	<br />
-	Nome do Usuário Logado #{contextoBean.usuarioLogado.nome}
-	<h:form>
-		<h:commandButton action="conta" value="Conta" />
-		
-		<h:selectOneMenu value="#{contextoBean.contaAtiva.conta}" valueChangeListener="#{contextoBean.contaAtiva}"
-			rendered="#{!empty contextoBean}" onchange="submit()">
-			<f:selectItems value="#{contaBean.lista}" var="conta" itemValue="#{conta.conta}" itemLabel="#{conta.descricao}"/>
-		</h:selectOneMenu>
-		
-		<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">u
-			<h:commandLink action="/admin/principal" title="Administrativo">
-				<h:graphicImage library="imagens" name="administrativo16.png"/>
-			</h:commandLink>
-		</sec:ifAnyGranted>
-		
-		<a onclick="document.location='#{request.contextPath}/j_spring_security_logout'" title="Sair">
-			<h:graphicImage library="imagens" name="logout16.png"/>
-		</a>	
-	</h:form>
+		<h:form>
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:panelGroup>
+					<p:fieldset>
+						<legend>Lançamentos até hoje</legend>
+						<util:extrato height="100px" width="350px"
+							larguraDescricao="130"  
+							lista="#{lancamentoBean.listaAteHoje}"
+							botaoEdicao="false"
+							botaoExclusao="false"
+							colunaSaldo="false"/>
+					</p:fieldset>
+				</h:panelGroup>
+				<h:panelGroup>
+					<p:fieldset>
+						<legend>Lançamentos futuros</legend>
+						<util:extrato larguraDescricao="130" height="100px" width="350px" 
+							lista="#{lancamentoBean.listaFuturos}"
+							botaoEdicao="false"
+							botaoExclusao="false"
+							colunaSaldo="false"/>
+					</p:fieldset>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>

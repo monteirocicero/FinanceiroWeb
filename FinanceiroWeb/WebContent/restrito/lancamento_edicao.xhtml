@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
 	<h:form id="edicao">
@@ -21,7 +21,7 @@
 				<f:selectItems value="#{categoriaBean.categoriasSelect}"/>
 			</h:selectOneMenu>
 			<h:inputText id="descricao" value="#{lancamentoBean.editado.descricao}" required="true" size="30"/>
-			<h:inputText id="valor" value="#{lancamentoBean.editador.valor}">
+			<h:inputText id="valor" value="#{lancamentoBean.editado.valor}">
 				<f:convertNumber minFractionDigits="2" maxIntegerDigits="2"/>
 			</h:inputText>
 		</h:panelGrid>

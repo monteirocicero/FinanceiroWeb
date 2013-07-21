@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.OnDelete;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.OrderBy;
 import financeiro.usuario.Usuario;
 
 @Entity
+@Table(name = "categoria")
 public class Categoria implements Serializable {
 	
 	/**

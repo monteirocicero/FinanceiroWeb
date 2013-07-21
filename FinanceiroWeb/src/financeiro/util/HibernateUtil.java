@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 
+import financeiro.conta.Conta;
+
 public class HibernateUtil {
 	
 	private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -11,6 +13,7 @@ public class HibernateUtil {
 	private static SessionFactory buildSessionFactory() {
 		try {
 			AnnotationConfiguration cfg = new AnnotationConfiguration();
+			cfg.addAnnotatedClass(Conta.class);
 			cfg.configure("hibernate.cfg.xml");
 			return cfg.buildSessionFactory();
 		} catch (Throwable e) {
