@@ -25,6 +25,11 @@
 				<f:convertNumber minFractionDigits="2" maxIntegerDigits="2"/>
 			</h:inputText>
 		</h:panelGrid>
+		<h:outputLabel value="Fornecedor/Favorecido:" /><br/>
+		<p:autoComplete id="fornecedor" value="#{lancamentoBean.idEntidade}"
+				completeMethod="#{lancamentoBean.buscaEntidades}" minQueryLength="3"
+				var="entidade" itemLabel="#{entidade.nome}" itemValue="#{entidade.id}">
+		</p:autoComplete><br/>
 		<p:commandButton value="Novo" action="#{lancamentoBean.novo}" process="@this" update="edicao"/>
 		<p:commandButton value="Salvar" action="#{lancamentoBean.salvar}" update="listagem, edicao"/>
 	</h:form>

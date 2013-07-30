@@ -12,6 +12,8 @@ import javax.faces.bean.ViewScoped;
 
 import financeiro.categoria.Categoria;
 import financeiro.conta.Conta;
+import financeiro.entidade.Entidade;
+import financeiro.entidade.EntidadeRN;
 import financeiro.web.ContextoBean;
 import financeiro.web.util.ContextoUtil;
 
@@ -30,7 +32,10 @@ public class LancamentoBean implements Serializable {
 	private Lancamento editado = new Lancamento();
 	private List<Lancamento> listaAteHoje;
 	private List<Lancamento> listaFuturos;
-	
+	private List<Entidade> entidades;
+	private Entidade entidade = new Entidade();
+	private Integer idEntidade;
+			
 	public LancamentoBean() {
 		novo();
 	}
@@ -49,7 +54,15 @@ public class LancamentoBean implements Serializable {
 		editado.setUsuario(contextoBean.getUsuarioLogado());
 		editado.setConta(contextoBean.getContaAtiva());
 		
+		EntidadeRN entidadeRN = new EntidadeRN();
+		Entidade tmpEntidade = entidadeRN.buscaPorNome(entidade.getNome());
+		
+		if (tmpEntidade == null) {
+			entidadeRN.salvar(entidade);
+		}
+				
 		LancamentoRN lancamentoRN = new LancamentoRN();
+		editado.setEntidade(entidade);
 		lancamentoRN.salvar(editado);
 		
 		novo();
@@ -116,6 +129,12 @@ public class LancamentoBean implements Serializable {
 		}
 		return null;
 	}
+	
+	public List<Entidade> buscaEntidades(String nome) {
+		EntidadeRN entidadeRN = new EntidadeRN();
+		entidades = entidadeRN.listaPorNome(nome);
+		return entidades;
+	}
 
 	public List<Double> getSaldos() {
 		return saldos;
@@ -144,5 +163,31 @@ public class LancamentoBean implements Serializable {
 	public void setLista(List<Lancamento> lista) {
 		this.lista = lista;
 	}
+
+	public List<Entidade> getEntidades() {
+		return entidades;
+	}
+
+	public void setEntidades(List<Entidade> entidades) {
+		this.entidades = entidades;
+	}
+
+	public Entidade getEntidade() {
+		return entidade;
+	}
+
+	public void setEntidade(Entidade entidade) {
+		this.entidade = entidade;
+	}
+
+	public Integer getIdEntidade() {
+		return idEntidade;
+	}
+
+	public void setIdEntidade(Integer idEntidade) {
+		this.idEntidade = idEntidade;
+	}
+
 	
+		
 }

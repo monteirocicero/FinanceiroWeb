@@ -21,17 +21,17 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import financeiro.categoria.Categoria;
 import financeiro.conta.Conta;
+import financeiro.entidade.Entidade;
 import financeiro.usuario.Usuario;
 
 @Entity
 @Table(name = "lancamento")
 public class Lancamento implements Serializable {
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5151330259929820448L;
-	
+	private static final long serialVersionUID = -7918946338716611968L;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "codigo")
@@ -61,6 +61,11 @@ public class Lancamento implements Serializable {
 	
 	@Column(precision = 10, scale = 2)
 	private BigDecimal valor;
+	
+	@ManyToOne
+	@JoinColumn(name = "entidade")
+	@ForeignKey(name = "fk_lancamento_entidade")
+	private Entidade entidade;
 	
 	public Integer getLancamento() {
 		return lancamento;
@@ -117,6 +122,14 @@ public class Lancamento implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public Entidade getEntidade() {
+		return entidade;
+	}
+
+	public void setEntidade(Entidade entidade) {
+		this.entidade = entidade;
+	}
 
 	@Override
 	public int hashCode() {
@@ -128,6 +141,8 @@ public class Lancamento implements Serializable {
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result
 				+ ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result
+				+ ((entidade == null) ? 0 : entidade.hashCode());
 		result = prime * result
 				+ ((lancamento == null) ? 0 : lancamento.hashCode());
 		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
@@ -163,6 +178,11 @@ public class Lancamento implements Serializable {
 			if (other.descricao != null)
 				return false;
 		} else if (!descricao.equals(other.descricao))
+			return false;
+		if (entidade == null) {
+			if (other.entidade != null)
+				return false;
+		} else if (!entidade.equals(other.entidade))
 			return false;
 		if (lancamento == null) {
 			if (other.lancamento != null)
