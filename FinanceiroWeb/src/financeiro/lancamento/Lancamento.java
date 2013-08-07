@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import financeiro.categoria.Categoria;
+import financeiro.cheque.Cheque;
 import financeiro.conta.Conta;
 import financeiro.entidade.Entidade;
 import financeiro.usuario.Usuario;
@@ -32,41 +34,20 @@ public class Lancamento implements Serializable {
 	 */
 	private static final long serialVersionUID = -7918946338716611968L;
 
+	
+	private Integer lancamento;
+	private Usuario usuario;
+	private Conta conta;
+	private Categoria categoria;
+	private Date data;
+	private String descricao;
+	private BigDecimal valor;
+	private Entidade entidade;
+	private Cheque cheque;
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "codigo")
-	private Integer lancamento;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "usuario", nullable = true)
-	@ForeignKey(name = "fk_lancamento_usuario")
-	private Usuario usuario;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "conta", nullable = true)
-	@ForeignKey(name = "fk_lancamento_conta")
-	private Conta conta;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "categoria", nullable = true)
-	@ForeignKey(name = "fk_lancamento_categoria")
-	private Categoria categoria;
-	
-	@Temporal(TemporalType.DATE)
-	private Date data;
-	private String descricao;
-	
-	@Column(precision = 10, scale = 2)
-	private BigDecimal valor;
-	
-	@ManyToOne
-	@JoinColumn(name = "entidade")
-	@ForeignKey(name = "fk_lancamento_entidade")
-	private Entidade entidade;
-	
 	public Integer getLancamento() {
 		return lancamento;
 	}
@@ -75,6 +56,10 @@ public class Lancamento implements Serializable {
 		this.lancamento = lancamento;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "usuario", nullable = true)
+	@ForeignKey(name = "fk_lancamento_usuario")
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -83,6 +68,10 @@ public class Lancamento implements Serializable {
 		this.usuario = usuario;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "conta", nullable = true)
+	@ForeignKey(name = "fk_lancamento_conta")
 	public Conta getConta() {
 		return conta;
 	}
@@ -91,6 +80,10 @@ public class Lancamento implements Serializable {
 		this.conta = conta;
 	}
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "categoria", nullable = true)
+	@ForeignKey(name = "fk_lancamento_categoria")
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -99,6 +92,7 @@ public class Lancamento implements Serializable {
 		this.categoria = categoria;
 	}
 	
+	@Column(precision = 10, scale = 2)
 	public BigDecimal getValor() {
 		return valor;
 	}
@@ -107,6 +101,7 @@ public class Lancamento implements Serializable {
 		this.valor = valor;
 	}
 	
+	@Temporal(TemporalType.DATE)
 	public Date getData() {
 		return data;
 	}
@@ -123,12 +118,24 @@ public class Lancamento implements Serializable {
 		this.descricao = descricao;
 	}
 	
+	@ManyToOne
+	@JoinColumn(name = "entidade")
+	@ForeignKey(name = "fk_lancamento_entidade")
 	public Entidade getEntidade() {
 		return entidade;
 	}
 
 	public void setEntidade(Entidade entidade) {
 		this.entidade = entidade;
+	}
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "lancamento")
+	public Cheque getCheque() {
+		return cheque;
+	}
+
+	public void setCheque(Cheque cheque) {
+		this.cheque = cheque;
 	}
 
 	@Override
@@ -137,6 +144,7 @@ public class Lancamento implements Serializable {
 		int result = 1;
 		result = prime * result
 				+ ((categoria == null) ? 0 : categoria.hashCode());
+		result = prime * result + ((cheque == null) ? 0 : cheque.hashCode());
 		result = prime * result + ((conta == null) ? 0 : conta.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result
@@ -163,6 +171,11 @@ public class Lancamento implements Serializable {
 			if (other.categoria != null)
 				return false;
 		} else if (!categoria.equals(other.categoria))
+			return false;
+		if (cheque == null) {
+			if (other.cheque != null)
+				return false;
+		} else if (!cheque.equals(other.cheque))
 			return false;
 		if (conta == null) {
 			if (other.conta != null)

@@ -9,7 +9,7 @@ import javax.faces.convert.FacesConverter;
 import financeiro.entidade.Entidade;
 import financeiro.entidade.EntidadeRN;
 
-@FacesConverter(forClass=Entidade.class)
+@FacesConverter(value="entidadeConverter")
 public class EntidadeConverter implements Converter {
 	
 

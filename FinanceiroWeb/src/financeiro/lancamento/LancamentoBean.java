@@ -7,13 +7,16 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import financeiro.categoria.Categoria;
 import financeiro.conta.Conta;
 import financeiro.entidade.Entidade;
 import financeiro.entidade.EntidadeRN;
+import financeiro.util.RNException;
 import financeiro.web.ContextoBean;
 import financeiro.web.util.ContextoUtil;
 
@@ -33,9 +36,7 @@ public class LancamentoBean implements Serializable {
 	private List<Lancamento> listaAteHoje;
 	private List<Lancamento> listaFuturos;
 	private List<Entidade> entidades;
-	private Entidade entidade = new Entidade();
-	private Integer idEntidade;
-			
+				
 	public LancamentoBean() {
 		novo();
 	}
@@ -54,15 +55,15 @@ public class LancamentoBean implements Serializable {
 		editado.setUsuario(contextoBean.getUsuarioLogado());
 		editado.setConta(contextoBean.getContaAtiva());
 		
-		EntidadeRN entidadeRN = new EntidadeRN();
-		Entidade tmpEntidade = entidadeRN.buscaPorNome(entidade.getNome());
-		
-		if (tmpEntidade == null) {
-			entidadeRN.salvar(entidade);
-		}
+//		EntidadeRN entidadeRN = new EntidadeRN();
+//		Entidade tmpEntidade = entidadeRN.buscaPorNome(entidade.getNome());
+//		
+//		if (tmpEntidade == null) {
+//			entidadeRN.salvar(entidade);
+//		}
 				
 		LancamentoRN lancamentoRN = new LancamentoRN();
-		editado.setEntidade(entidade);
+		//editado.setEntidade(entidade);
 		lancamentoRN.salvar(editado);
 		
 		novo();
@@ -89,16 +90,23 @@ public class LancamentoBean implements Serializable {
 			inicio.add(Calendar.MONTH, -1);
 			
 			LancamentoRN lancamentoRN = new LancamentoRN();
-			saldoGeral = lancamentoRN.saldo(conta, dataSaldo.getTime());
-			lista = lancamentoRN.listar(conta, inicio.getTime(), null);
-			
-			Categoria categoria = null;
-			double saldo = saldoGeral;
-			for (Lancamento lancamento : lista) {
-				categoria = lancamento.getCategoria();
-				saldo += lancamento.getValor().floatValue() * categoria.getFator();
-				saldos.add(saldo);
+			try {
+				saldoGeral = lancamentoRN.saldo(conta, dataSaldo.getTime());
+				lista = lancamentoRN.listar(conta, inicio.getTime(), null);
+				
+				Categoria categoria = null;
+				double saldo = saldoGeral;
+				for (Lancamento lancamento : lista) {
+					categoria = lancamento.getCategoria();
+					saldo += lancamento.getValor().floatValue() * categoria.getFator();
+					saldos.add(saldo);
+				}
+			} catch (RNException e) {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(null, new FacesMessage(e.getMessage()));
+				return null;
 			}
+			
 		}
 		return lista;
 	}
@@ -130,11 +138,19 @@ public class LancamentoBean implements Serializable {
 		return null;
 	}
 	
+	/*
 	public List<Entidade> buscaEntidades(String nome) {
-		EntidadeRN entidadeRN = new EntidadeRN();
-		entidades = entidadeRN.listaPorNome(nome);
-		return entidades;
+		List<String> paisesSugeridos = new ArrayList<>();
+
+		for (String pais : this.paises) {
+			if (pais.toLowerCase().startsWith(consulta.toLowerCase())) {
+				paisesSugeridos.add(pais);
+			}
+		}
+
+		return paisesSugeridos;
 	}
+	*/
 
 	public List<Double> getSaldos() {
 		return saldos;
@@ -171,23 +187,5 @@ public class LancamentoBean implements Serializable {
 	public void setEntidades(List<Entidade> entidades) {
 		this.entidades = entidades;
 	}
-
-	public Entidade getEntidade() {
-		return entidade;
-	}
-
-	public void setEntidade(Entidade entidade) {
-		this.entidade = entidade;
-	}
-
-	public Integer getIdEntidade() {
-		return idEntidade;
-	}
-
-	public void setIdEntidade(Integer idEntidade) {
-		this.idEntidade = idEntidade;
-	}
-
-	
 		
 }
